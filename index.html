@@ -30,87 +30,68 @@
     }
 
     h1 {
-      font-size: 2.6rem;
-      margin-bottom: 30px;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
       color: #4a4a7d;
     }
 
     .buttons {
       display: flex;
-      gap: 25px;
+      gap: 20px;
       justify-content: center;
+      margin-top: 20px;
     }
 
     button {
-      padding: 16px 34px;
-      font-size: 1.2rem;
+      padding: 14px 30px;
+      font-size: 1.1rem;
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
     #yesBtn {
       background-color: #ff7eb3;
       color: white;
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
     }
 
     #noBtn {
       background-color: #dddddd;
-      color: black;
+    }
+
+    #musicBtn {
+      margin-top: 20px;
+      background-color: #6b7cff;
+      color: white;
     }
 
     .final-message {
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: #5a4fcf;
-      line-height: 1.5;
+      margin-top: 30px;
     }
 
     .heart {
       position: absolute;
       bottom: -20px;
-      font-size: 24px;
+      font-size: 22px;
       animation: floatUp 6s linear forwards;
-      opacity: 0.8;
     }
 
     @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); opacity: 0.9; }
-      100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
-    }
-
-    /* Audio unlock screen */
-    .audio-unlock {
-      position: fixed;
-      inset: 0;
-      background: rgba(255,255,255,0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: #555;
-      z-index: 10;
-      cursor: pointer;
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-110vh); opacity: 0; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- AUDIO UNLOCK OVERLAY -->
-  <div class="audio-unlock" id="unlock">
-    tap anywhere to start 💙
-  </div>
-
   <div class="container" id="container">
     <h1>Zimmie, will you be my best friend (maybe more)?</h1>
+
+    <!-- PLAY MUSIC BUTTON (THIS UNLOCKS AUDIO) -->
+    <button id="musicBtn">▶ play music</button>
 
     <div class="buttons">
       <button id="yesBtn">YES</button>
@@ -118,18 +99,17 @@
     </div>
   </div>
 
-  <!-- Background music -->
+  <!-- Audio files -->
   <audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/audio/2023/03/16/audio_7b1f5b2c7a.mp3" type="audio/mpeg">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- YES sound -->
   <audio id="yesSound">
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b6c2c41b4.mp3" type="audio/mpeg">
+    <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg">
   </audio>
 
   <script>
-    const unlock = document.getElementById("unlock");
+    const musicBtn = document.getElementById("musicBtn");
     const bgMusic = document.getElementById("bgMusic");
     const yesSound = document.getElementById("yesSound");
     const yesBtn = document.getElementById("yesBtn");
@@ -147,13 +127,43 @@
       "princess pleaseeee 😭"
     ];
 
-    // UNLOCK AUDIO
-    unlock.addEventListener("click", () => {
+    musicBtn.addEventListener("click", () => {
       bgMusic.volume = 0.25;
       bgMusic.play();
-      unlock.remove();
+      musicBtn.textContent = "🎵 music playing";
     });
 
     noBtn.addEventListener("click", () => {
-      scale += 0.25;
-      yesBtn.style.transform = `scale(${sc
+      scale += 0.2;
+      yesBtn.style.transform = `scale(${scale})`;
+
+      if (clickCount < noTexts.length) {
+        noBtn.textContent = noTexts[clickCount];
+        clickCount++;
+      }
+    });
+
+    yesBtn.addEventListener("click", () => {
+      yesSound.volume = 0.5;
+      yesSound.play();
+
+      container.innerHTML = `
+        <div class="final-message">
+          thank you so much for appearing<br>
+          in my life 💙
+        </div>
+      `;
+
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    });
+  </script>
+
+</body>
+</html>
