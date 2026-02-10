@@ -85,10 +85,29 @@
       0% { transform: translateY(0) scale(1); opacity: 0.9; }
       100% { transform: translateY(-110vh) scale(1.6); opacity: 0; }
     }
+
+    /* Audio unlock screen */
+    .audio-unlock {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #555;
+      z-index: 10;
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- AUDIO UNLOCK OVERLAY -->
+  <div class="audio-unlock" id="unlock">
+    tap anywhere to start 💙
+  </div>
 
   <div class="container" id="container">
     <h1>Zimmie, will you be my best friend (maybe more)?</h1>
@@ -100,25 +119,25 @@
   </div>
 
   <!-- Background music -->
-  <audio id="bgMusic" preload="auto" loop>
-    <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_1f8b3c1e3f.mp3" type="audio/mpeg">
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2023/03/16/audio_7b1f5b2c7a.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- YES click sound -->
-  <audio id="yesSound" preload="auto">
+  <!-- YES sound -->
+  <audio id="yesSound">
     <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b6c2c41b4.mp3" type="audio/mpeg">
   </audio>
 
   <script>
+    const unlock = document.getElementById("unlock");
+    const bgMusic = document.getElementById("bgMusic");
+    const yesSound = document.getElementById("yesSound");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const container = document.getElementById("container");
-    const bgMusic = document.getElementById("bgMusic");
-    const yesSound = document.getElementById("yesSound");
 
     let scale = 1;
     let clickCount = 0;
-    let musicStarted = false;
 
     const noTexts = [
       "are you sure?",
@@ -128,52 +147,13 @@
       "princess pleaseeee 😭"
     ];
 
-    function startMusic() {
-      if (!musicStarted) {
-        bgMusic.volume = 0.25;
-        bgMusic.play().catch(() => {});
-        musicStarted = true;
-      }
-    }
+    // UNLOCK AUDIO
+    unlock.addEventListener("click", () => {
+      bgMusic.volume = 0.25;
+      bgMusic.play();
+      unlock.remove();
+    });
 
     noBtn.addEventListener("click", () => {
-      startMusic();
       scale += 0.25;
-      yesBtn.style.transform = `scale(${scale})`;
-
-      if (clickCount < noTexts.length) {
-        noBtn.textContent = noTexts[clickCount];
-        clickCount++;
-      }
-    });
-
-    yesBtn.addEventListener("click", () => {
-      startMusic();
-      yesSound.volume = 0.5;
-      yesSound.play().catch(() => {});
-
-      container.innerHTML = `
-        <div class="final-message">
-          thank you so much for appearing<br>
-          in my life 💙
-        </div>
-      `;
-
-      for (let i = 0; i < 25; i++) {
-        createHeart();
-      }
-    });
-
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "💖";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
-    }
-  </script>
-
-</body>
-</html>
+      yesBtn.style.transform = `scale(${sc
