@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A Question</title>
+
+  <!-- Professional Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #f4f6fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Inter", sans-serif;
+    }
+
+    .card {
+      width: 420px;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #4b5563;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .button-area {
+      position: relative;
+      height: 120px;
+    }
+
+    button {
+      padding: 12px 28px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: absolute;
+    }
+
+    #yesBtn {
+      background-color: #2563eb;
+      color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+    }
+
+    #noBtn {
+      background-color: #e5e7eb;
+      color: #374151;
+      right: 20px;
+      top: 0;
+    }
+
+    .final-message {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #2563eb;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card" id="card">
+    <h1>Zimmie</h1>
+    <p>
+      I wanted to ask you something honestly and directly.<br>
+      Would you like to be my best friend — and see where life takes us?
+    </p>
+
+    <div class="button-area">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const card = document.getElementById("card");
+
+    let scale = 1;
+
+    noBtn.addEventListener("click", () => {
+      // Grow YES button
+      scale += 0.15;
+      yesBtn.style.transform = `translateX(-50%) scale(${scale})`;
+
+      // Move NO button within the card
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = cardRect.width - btnRect.width - 40;
+      const maxY = 80;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      card.innerHTML = `
+        <div class="final-message">
+          Thank you so much for appearing in my life.
+        </div>
+      `;
+    });
+  </script>
+
+</body>
+</html>
