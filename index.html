@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Best Friends?</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(270deg, #ffd6e8, #e8f0ff, #fff1c1);
+      background-size: 600% 600%;
+      animation: gradientMove 12s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Segoe UI", Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      text-align: center;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      margin-bottom: 30px;
+      color: #4a4a7d;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+    }
+
+    button {
+      padding: 16px 34px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #yesBtn {
+      background-color: #ff7eb3;
+      color: white;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    #noBtn {
+      background-color: #dddddd;
+      color: black;
+      position: relative;
+    }
+
+    .final-message {
+      font-size: 2.2rem;
+      color: #5a4fcf;
+      line-height: 1.5;
+    }
+
+    /* floating hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container" id="container">
+    <h1>Zimmie, will you be my best friend (maybe more)?</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">YES</button>
+      <button id="noBtn">NO</button>
+    </div>
+  </div>
+
+  <!-- cute sound -->
+  <audio id="yesSound">
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7b6c2c41b4.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const container = document.getElementById("container");
+    const yesSound = document.getElementById("yesSound");
+
+    let scale = 1;
+    let clickCount = 0;
+
+    const noTexts = [
+      "are you sure?",
+      "princess u sure?",
+      "princesssssss",
+      "just say yes princess",
+      "princess pleaseeee 😭"
+    ];
+
+    noBtn.addEventListener("click", () => {
+      scale += 0.25;
+      yesBtn.style.transform = `scale(${scale})`;
+
+      if (clickCount < noTexts.length) {
+        noBtn.textContent = noTexts[clickCount];
+        clickCount++;
+      }
+    });
+
+    yesBtn.addEventListener("click", () => {
+      yesSound.play();
+
+      container.innerHTML = `
+        <div class="final-message">
+          thank you for letting me in<br>
+          ur life 💖👑
+        </div>
+      `;
+
+      // spawn hearts
+      for (let i = 0; i < 25; i++) {
+        createHeart();
+      }
+    });
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 6000);
+    }
+  </script>
+</body>
+</html>
