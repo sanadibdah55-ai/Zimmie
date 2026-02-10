@@ -2,166 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Best Friends?</title>
+  <title>A Question</title>
+
+  <!-- Professional Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: linear-gradient(270deg, #ffd6e8, #e8f0ff, #fff1c1);
-      background-size: 600% 600%;
-      animation: gradientMove 14s ease infinite;
+      background: #f4f6fb;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: "Segoe UI", Arial, sans-serif;
-      overflow: hidden;
+      font-family: "Inter", sans-serif;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .container {
+    .card {
+      width: 420px;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
       text-align: center;
-      z-index: 2;
+      position: relative;
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #4a4a7d;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 16px;
     }
 
-    .buttons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 20px;
+    p {
+      font-size: 1rem;
+      color: #4b5563;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .button-area {
+      position: relative;
+      height: 120px;
     }
 
     button {
-      padding: 14px 30px;
-      font-size: 1.1rem;
+      padding: 12px 28px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 8px;
       border: none;
-      border-radius: 14px;
       cursor: pointer;
+      transition: all 0.25s ease;
+      position: absolute;
     }
 
     #yesBtn {
-      background-color: #ff7eb3;
+      background-color: #2563eb;
       color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
     }
 
     #noBtn {
-      background-color: #dddddd;
-    }
-
-    #musicBtn {
-      margin-top: 20px;
-      background-color: #6b7cff;
-      color: white;
+      background-color: #e5e7eb;
+      color: #374151;
+      right: 20px;
+      top: 0;
     }
 
     .final-message {
-      font-size: 2rem;
-      color: #5a4fcf;
-      margin-top: 30px;
-    }
-
-    .heart {
-      position: absolute;
-      bottom: -20px;
-      font-size: 22px;
-      animation: floatUp 6s linear forwards;
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-110vh); opacity: 0; }
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #2563eb;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container" id="container">
-    <h1>Zimmie, will you be my best friend (maybe more)?</h1>
+  <div class="card" id="card">
+    <h1>Zimmie</h1>
+    <p>
+      I wanted to ask you something honestly and directly.<br>
+      Would you like to be my best friend — and see where life takes us?
+    </p>
 
-    <!-- PLAY MUSIC BUTTON (THIS UNLOCKS AUDIO) -->
-    <button id="musicBtn">▶ play music</button>
-
-    <div class="buttons">
-      <button id="yesBtn">YES</button>
-      <button id="noBtn">NO</button>
+    <div class="button-area">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
     </div>
   </div>
 
-  <!-- Audio files -->
-  <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-  </audio>
-
-  <audio id="yesSound">
-    <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg">
-  </audio>
-
   <script>
-    const musicBtn = document.getElementById("musicBtn");
-    const bgMusic = document.getElementById("bgMusic");
-    const yesSound = document.getElementById("yesSound");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
-    const container = document.getElementById("container");
+    const card = document.getElementById("card");
 
     let scale = 1;
-    let clickCount = 0;
-
-    const noTexts = [
-      "are you sure?",
-      "princess u sure?",
-      "princesssssss",
-      "just say yes princess",
-      "princess pleaseeee 😭"
-    ];
-
-    musicBtn.addEventListener("click", () => {
-      bgMusic.volume = 0.25;
-      bgMusic.play();
-      musicBtn.textContent = "🎵 music playing";
-    });
 
     noBtn.addEventListener("click", () => {
-      scale += 0.2;
-      yesBtn.style.transform = `scale(${scale})`;
+      // Grow YES button
+      scale += 0.15;
+      yesBtn.style.transform = `translateX(-50%) scale(${scale})`;
 
-      if (clickCount < noTexts.length) {
-        noBtn.textContent = noTexts[clickCount];
-        clickCount++;
-      }
+      // Move NO button within the card
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = cardRect.width - btnRect.width - 40;
+      const maxY = 80;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
     });
 
     yesBtn.addEventListener("click", () => {
-      yesSound.volume = 0.5;
-      yesSound.play();
-
-      container.innerHTML = `
+      card.innerHTML = `
         <div class="final-message">
-          thank you so much for appearing<br>
-          in my life 💙
+          Thank you so much for appearing in my life.
         </div>
       `;
-
-      for (let i = 0; i < 20; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.textContent = "💖";
-        heart.style.left = Math.random() * 100 + "vw";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
-      }
     });
   </script>
 
